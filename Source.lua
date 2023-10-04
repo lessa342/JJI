@@ -13,14 +13,28 @@ local Mobs = Objects:WaitForChild("Mobs")
 local Drops = Objects:WaitForChild("Drops")
 local CollectChest = Client:WaitForChild("CollectChest")
 
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+local Character = Player.Character or (Player.CharacterAdded:Wait() and Player.Character)
+local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+
+Player.CharacterAdded:Connect(function(Char)
+    Character = Char 
+    HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+end)
+
 local Grades = {
     ["Grade 5"] = 1,
     ["Grade 4"] = 2,
     ["Grade 3"] = 3,
     ["Grade 2"] = 4,
     ["Grade 1"] = 5,
-    ["Special Grade"] = 6
+    ["Special Grade"] = 6,
+    ["Special Grade 4"] = 6
 }
+
+local ReplicatedData = Player:WaitForChild("ReplicatedData")
+local PGrade = Grades[ReplicatedData:WaitForChild("grade").Value] or 10
 
 local UpdateStatus
 UpdateStatus = function() task.wait()
@@ -30,7 +44,7 @@ UpdateStatus = function() task.wait()
         local Type = v:FindFirstChild("Type")
         if Grade and Type then 
             Grade, Type = Grades[Grade.Value], Type.Value 
-            if Type == "Kill" and type(Grade) == "number" and Grade > CGrade then 
+            if Type == "Kill" and type(Grade) == "number" and Grade > CGrade and PGrade >= Grade then 
                 CMission = v 
                 CGrade = Grade	
             end 
@@ -52,16 +66,6 @@ UpdateStatus = function() task.wait()
 end 
 
 CollectChest.OnClientInvoke = function() return 0 end 
-
-local Players = game:GetService("Players")
-local Player = Players.LocalPlayer
-local Character = Player.Character or (Player.CharacterAdded:Wait() and Player.Character)
-local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
-
-Player.CharacterAdded:Connect(function(Char)
-    Character = Char 
-    HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
-end)
 
 while true do 
     if not pcall(function() AcceptQuest:InvokeServer(Mission) end) then UpdateStatus() end

@@ -97,6 +97,8 @@ while true do
 				local Chest = FindFirstChest()
 				local ProximityPrompt = Chest and Chest:FindFirstChild("Collect")
 				if ProximityPrompt then 
+                    ProximityPrompt.RequiresLineOfSight = false 
+                    ProximityPrompt.HoldDuration = 0
 					HumanoidRootPart.CFrame = Chest:GetPivot()
 					fireproximityprompt(ProximityPrompt)
 				elseif Chest then 

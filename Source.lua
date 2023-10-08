@@ -24,7 +24,7 @@ Player.CharacterAdded:Connect(function(Char)
 end)
 
 local Grades = {
-    ["Grade 5"] = 1,
+    ["Non Sorcerer"] = 1,
     ["Grade 4"] = 2,
     ["Grade 3"] = 3,
     ["Grade 2"] = 4,
@@ -65,6 +65,17 @@ UpdateStatus = function() task.wait()
     end 
 end 
 
+local FindFirstChest = function()
+    local Chest 
+    for i,v in next, Drops:GetChildren() do 
+        if v.Name:lower():match("chest") then 
+            Chest = v 
+            break 
+        end 
+    end 
+    return Chest 
+end 
+
 CollectChest.OnClientInvoke = function() return 0 end 
 
 while true do 
@@ -81,9 +92,9 @@ while true do
 			end 
 			repeat task.wait() until Humanoid.Health <= 0 
 			Mob:Destroy()
-			repeat task.wait() until Drops:FindFirstChild("Chest")
+			repeat task.wait() until FindFirstChest()
 			repeat 
-				local Chest = Drops:FindFirstChild("Chest")
+				local Chest = FindFirstChest()
 				local ProximityPrompt = Chest and Chest:FindFirstChild("Collect")
 				if ProximityPrompt then 
 					HumanoidRootPart.CFrame = Chest:GetPivot()
@@ -92,7 +103,7 @@ while true do
 					Chest:Destroy()
 				end 
 				task.wait()
-			until not Drops:FindFirstChild("Chest")
+			until not FindFirstChest()
 		end 
 	end 
 	task.wait()

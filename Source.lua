@@ -24,13 +24,13 @@ Player.CharacterAdded:Connect(function(Char)
 end)
 
 local Grades = {
-    ["Non Sorcerer"] = 1,
+    ["Non Sorcerer"] = 6
     ["Grade 4"] = 2,
     ["Grade 3"] = 3,
     ["Grade 2"] = 4,
     ["Grade 1"] = 5,
-    ["Special Grade"] = 6,
-    ["Special Grade 4"] = 6
+    ["Special Grade"] = 1,
+    ["Special Grade 4"] = 7,
 }
 
 local ReplicatedData = Player:WaitForChild("ReplicatedData")
